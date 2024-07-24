@@ -93,3 +93,22 @@ rule virulence_classification:
         time=5
     script:
         "scripts/virulence_classification.py"
+
+rule signalp:
+    input:
+        "results/{sample}/prodigal/{sample}.faa"
+    output:
+        "results/{sample}/signalp/{sample}_summary.signalp6"
+    params:
+        jobname="{sample}.sp",
+        outputdir="results/{sample}/signalp"
+    threads:
+        8
+    resources:
+        mem_gb=8,
+        time=120
+    shell:
+        """
+        module load signalp/6.0h.fast
+        signalp6 --fastafile {input} --output_dir {params.outputdir} --write_procs {threads} --torch_num_threads {threads}
+        """
