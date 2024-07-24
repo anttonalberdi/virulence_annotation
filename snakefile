@@ -40,7 +40,7 @@ rule prodigal:
 
 rule hmmscan:
     input:
-        query="results/{sample}/prodigal/{sample}.faa"
+        query="results/{sample}/prodigal/{sample}.faa",
         database="/projects/mjolnir1/people/jpl786/PathoFact/databases/virulence/Virulence_factor.hmm"
     output:
         "results/{sample}/hmmer/{sample}.hmmscan"
