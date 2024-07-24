@@ -16,7 +16,7 @@ samples, = glob_wildcards("genomes/{sample}.fa")
 #Expand target files
 rule all:
     input:
-        expand("results/{sample}/hmmer/{sample}.tsv", sample=samples)
+        expand("results/{sample}/hmmer/{sample}.csv", sample=samples)
 
 rule prodigal:
     input:
