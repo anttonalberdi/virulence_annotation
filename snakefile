@@ -16,7 +16,7 @@ samples, = glob_wildcards("genomes/{sample}.fa")
 #Expand target files
 rule all:
     input:
-        expand("results/{sample}/hmmer/{sample}.hmmscan", sample=samples)
+        expand("results/{sample}/hmmer/{sample}.tsv", sample=samples)
 
 rule prodigal:
     input:
@@ -31,7 +31,7 @@ rule prodigal:
         1
     resources:
         mem_gb=8,
-        time='01:00:00'
+        time=30
     shell:
         """
         module load prodigal/2.6.3
@@ -50,9 +50,26 @@ rule hmmscan:
         4
     resources:
         mem_gb=8,
-        time='01:00:00'
+        time=30
     shell:
         """
         module load hmmer/3.3.2
         hmmsearch --cpu {threads} --noali --notextw --tblout {output} {input.database} {input.query}
+        """
+
+rule hmm_reformat:
+    input:
+        "results/{sample}/hmmer/{sample}.hmmscan"
+    output:
+        "results/{sample}/hmmer/{sample}.tsv"
+    params:
+        jobname="{sample}.rf"
+    threads:
+        1
+    resources:
+        mem_gb=8,
+        time=5
+    shell:
+        """
+        sed '/^#/ d' {input} | sed 's/ \+/;/g' | cut -d ';' -f 1,3,5,6 | tr ';' '\t' > {output}
         """
