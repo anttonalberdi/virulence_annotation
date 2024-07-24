@@ -1,8 +1,8 @@
 import sys
 
-positive_domains_file = snakemake.output[1]
-negative_domains_file = snakemake.output[2]
-ambiguous_domains_file = snakemake.output[3]
+positive_domains_file = snakemake.input[1]
+negative_domains_file = snakemake.input[2]
+ambiguous_domains_file = snakemake.input[3]
 input_table = snakemake.input[0]
 output_table = snakemake.output[0]
 
