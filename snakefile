@@ -20,7 +20,7 @@ rule all:
 
 rule prodigal:
     input:
-        "mag_catalogue/{sample}.fa"
+        "genomes/{sample}.fa"
     output:
         fna=temp("results/{sample}/prodigal/{sample}.genes.fna"),
         faa=temp("results/{sample}/prodigal/{sample}.genes.faa"),
