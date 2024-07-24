@@ -73,3 +73,21 @@ rule hmm_reformat:
         """
         sed '/^#/ d' {input} | sed 's/ \+/;/g' | cut -d ';' -f 1,3,5,6 | tr ';' '\t' > {output}
         """
+
+rule virulence_classification:
+    input:
+        hmm="results/{sample}/hmmer/{sample}.tsv",
+        positive="/projects/mjolnir1/people/jpl786/PathoFact/databases/models_and_domains/positive_domains.tsv",
+        negative="/projects/mjolnir1/people/jpl786/PathoFact/databases/models_and_domains/negative_domains.tsv",
+        shared="/projects/mjolnir1/people/jpl786/PathoFact/databases/models_and_domains/shared_domains.tsv"
+    output:
+        "results/{sample}/hmmer/{sample}.csv"
+    params:
+        jobname="{sample}.cl"
+    threads:
+        1
+    resources:
+        mem_gb=8,
+        time=5
+    script:
+        "scripts/hmm.R"
