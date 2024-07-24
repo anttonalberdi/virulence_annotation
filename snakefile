@@ -23,7 +23,7 @@ rule prodigal:
         "mag_catalogue/{sample}.fa"
     output:
         fna=temp("results/{sample}/prodigal/{sample}.genes.fna"),
-        faa=temp("results/{sample}/prodigal/{sample}.genes.faa")
+        faa=temp("results/{sample}/prodigal/{sample}.genes.faa"),
         gff=temp("results/{sample}/prodigal/{sample}.genes.gff")
     params:
         jobname="{sample}.pr"
