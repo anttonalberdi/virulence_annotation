@@ -5,6 +5,7 @@ Virulence factor annotation for MAGs
 On a screen session, launch the snakefile to generate the SBMLs
 ```
 screen -S virulence
+cd virulence_annotation
 module purge && module load snakemake/7.20.0 mamba/1.3.1
 snakemake \
   -j 20 \
