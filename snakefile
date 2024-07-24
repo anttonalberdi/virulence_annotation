@@ -13,6 +13,8 @@
 #List sample wildcards
 samples, = glob_wildcards("genomes/{sample}.fa")
 
+localrules: virulence_classification
+
 #Expand target files
 rule all:
     input:
