@@ -89,5 +89,8 @@ rule virulence_classification:
     resources:
         mem_gb=8,
         time=5
-    script:
-        "scripts/hmm.R"
+    shell:
+        """
+        module load gcc/11.2.0 R/4.3.1
+        Rscript scripts/hmm.R
+        """
