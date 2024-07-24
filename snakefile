@@ -16,15 +16,15 @@ samples, = glob_wildcards("genomes/{sample}.fa")
 #Expand target files
 rule all:
     input:
-        expand("results/{sample}/prodigal/{sample}.genes.gff", sample=samples)
+        expand("results/{sample}/hmmer/{sample}.hmmscan", sample=samples)
 
 rule prodigal:
     input:
         "genomes/{sample}.fa"
     output:
-        fna=temp("results/{sample}/prodigal/{sample}.genes.fna"),
-        faa=temp("results/{sample}/prodigal/{sample}.genes.faa"),
-        gff=temp("results/{sample}/prodigal/{sample}.genes.gff")
+        fna="results/{sample}/prodigal/{sample}.fna",
+        faa="results/{sample}/prodigal/{sample}.faa",
+        gff="results/{sample}/prodigal/{sample}.gff"
     params:
         jobname="{sample}.pr"
     threads:
@@ -35,5 +35,24 @@ rule prodigal:
     shell:
         """
         module load prodigal/2.6.3
-        prodigal -i {input} -d {output.fna} -a {output.faa} -o {output.gff} -p meta
+        prodigal -i {input} -d {output.fna} -a {output.faa} -o {output.gff}
+        """
+
+rule hmmscan:
+    input:
+        query="results/{sample}/prodigal/{sample}.faa"
+        database="/projects/mjolnir1/people/jpl786/PathoFact/databases/virulence/Virulence_factor.hmm"
+    output:
+        "results/{sample}/hmmer/{sample}.hmmscan"
+    params:
+        jobname="{sample}.hm"
+    threads:
+        4
+    resources:
+        mem_gb=8,
+        time='01:00:00'
+    shell:
+        """
+        module load hmmer/3.3.2
+        hmmsearch --cpu {threads} --noali --notextw --tblout {output} {input.database} {input.query}
         """
