@@ -91,34 +91,5 @@ rule virulence_classification:
     resources:
         mem_gb=8,
         time=5
-    run:
-        positive_domains_file = input.positive
-        negative_domains_file = input.negative
-        ambiguous_domains_file = input.shared
-        input_table = input.hmm
-        output_table = output
-
-        # Read the positive domains into a set for fast lookup
-        with open(positive_domains_file, 'r') as domains_file:
-            positive_domains = {line.strip() for line in domains_file}
-        
-        # Read the negative domains into a set for fast lookup
-        with open(negative_domains_file, 'r') as domains_file:
-            negative_domains = {line.strip() for line in domains_file}
-        
-        # Read the ambiguous domains into a set for fast lookup
-        with open(ambiguous_domains_file, 'r') as domains_file:
-            ambiguous_domains = {line.strip() for line in domains_file}
-        
-        with open(input_table, 'r') as infile, open(output_table, 'w') as outfile:
-            for line in infile:
-                columns = line.strip().split()
-                annotation = ""
-                if columns[1] in positive_domains:
-                    annotation = "pathogenic"
-                elif columns[1] in negative_domains:
-                    annotation = "negative"
-                elif columns[1] in ambiguous_domains:
-                    annotation = "ambiguous"
-                # Write the original line with the appropriate annotation
-                outfile.write(f"{line.strip()}\t{annotation}\n")
+    script:
+        "scripts/virulence_classification.py"
