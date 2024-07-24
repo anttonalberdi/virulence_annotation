@@ -27,8 +27,6 @@ rule prodigal:
         gff=temp("results/{sample}/prodigal/{sample}.genes.gff")
     params:
         jobname="{sample}.pr"
-    conda:
-        "environment.yml"
     threads:
         1
     resources:
@@ -36,5 +34,6 @@ rule prodigal:
         time='01:00:00'
     shell:
         """
+        module load prodigal/2.6.3
         prodigal -i {input} -d {output.fna} -a {output.faa} -o {output.gff} -p meta
         """
