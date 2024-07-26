@@ -108,6 +108,6 @@ rule signalp:
         time=120
     shell:
         """
-        module load signalp/6.0h.fast
+        module load signalp/6h
         signalp6 --fastafile {input} --output_dir {params.outputdir} --write_procs {threads} --torch_num_threads {threads}
         """
