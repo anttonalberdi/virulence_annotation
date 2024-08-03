@@ -1,0 +1,7 @@
+name: virulence_annotation_env
+dependencies:
+  - conda-forge::python=3.7
+  - conda-forge::python_abi=3.7
+  - conda-forge::biopython=1.77
+  - defaults::numpy=1.18.5
+  - defaults::pandas=1.0.5
