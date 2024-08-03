@@ -97,6 +97,116 @@ rule virulence_classification:
     script:
         "scripts/virulence_classification.py"
 
+# Predict virulence from RF models
+rule AAC:
+    input:
+        "results/{sample}/prodigal/{sample}.faa"
+    output:
+        "results/{sample}/rf/{sample}_AAC.txt"
+    params:
+        jobname="{sample}.rf1"
+    threads:
+        1
+    resources:
+        mem_gb=8,
+        time=120
+    shell:
+        """
+        python scripts/AAC.py --file {input} --out {output}
+        """
+
+rule DPC:
+    input:
+        "results/{sample}/prodigal/{sample}.faa"
+    output:
+        "results/{sample}/rf/{sample}_DPC.txt"
+    params:
+        jobname="{sample}.rf2"
+    threads:
+        1
+    resources:
+        mem_gb=8,
+        time=120
+    shell:
+        """
+        python scripts/DPC.py --file {input} --out {output}
+        """
+
+rule CTDC:
+    input:
+        "results/{sample}/prodigal/{sample}.faa"
+    output:
+        "results/{sample}/rf/{sample}_CTDC.txt"
+    params:
+        jobname="{sample}.rf3"
+    threads:
+        1
+    resources:
+        mem_gb=8,
+        time=120
+    shell:
+        """
+        python scripts/CTDC.py --file {input} --out {output}
+        """
+
+rule CTDT:
+    input:
+        "results/{sample}/prodigal/{sample}.faa"
+    output:
+        "results/{sample}/rf/{sample}_CTDT.txt"
+    params:
+        jobname="{sample}.rf4"
+    threads:
+        1
+    resources:
+        mem_gb=8,
+        time=120
+    shell:
+        """
+        python scripts/CTDT.py --file {input} --out {output}
+        """
+
+rule CTDD:
+    input:
+        "results/{sample}/prodigal/{sample}.faa"
+    output:
+        "results/{sample}/rf/{sample}_CTDD.txt"
+    params:
+        jobname="{sample}.rf5"
+    threads:
+        1
+    resources:
+        mem_gb=8,
+        time=120
+    shell:
+        """
+        python scripts/CTDD.py --file {input} --out {output}
+        """
+
+rule merge_RF:
+    input:
+        AAC="results/{sample}/rf/{sample}_AAC.txt",
+        DPC="results/{sample}/rf/{sample}_DPC.txt",
+        CTDC="results/{sample}/rf/{sample}_CTDC.txt",
+        CTDT="results/{sample}/rf/{sample}_CTDT.txt",
+        CTDD="results/{sample}/rf/{sample}_CTDD.txt",
+        model="/projects/mjolnir1/people/jpl786/PathoFact/scripts/Virulence_factor_model.sav"
+    output:
+        all="results/{sample}/rf/{sample}_all.txt",
+        final="results/{sample}/rf/{sample}.csv"
+    params:
+        jobname="{sample}.rf"
+    threads:
+        1
+    resources:
+        mem_gb=8,
+        time=120
+    shell:
+        """
+        cat {input.AAC} {input.DPC} {input.CTDC} {input.CTDT} {input.CTDD} > {output.all}
+        python scripts/virulence_prediction.py {output.all} {output.final} {input.model}
+        """
+
 # Define whether toxins are secreted or non-secreted.
 rule signalp:
     input:
