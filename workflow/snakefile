@@ -97,8 +97,10 @@ rule virulence_classification:
         time=5
     conda:
         "envs/environment.yml"
-    script:
-        "workflow/scripts/virulence_classification.py"
+    shell:
+        """
+        python workflow/scripts/virulence_classification.py {input.hmm} {input.positive} {input.negative} {input.shared} {output}
+        """
 
 # Predict virulence from RF models
 rule AAC:
