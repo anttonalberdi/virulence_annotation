@@ -19,6 +19,7 @@ rule all:
         expand("results/{sample}/hmmer/{sample}.csv", sample=samples),
         expand("results/{sample}/signalp/{sample}_summary.signalp6", sample=samples)
 
+# Predict genes in genome sequences. 
 rule prodigal:
     input:
         "genomes/{sample}.fa"
@@ -39,6 +40,7 @@ rule prodigal:
         prodigal -i {input} -d {output.fna} -a {output.faa} -o {output.gff}
         """
 
+# Search for virulence factors' hmm profiles in the PathoFact database
 rule hmmscan:
     input:
         query="results/{sample}/prodigal/{sample}.faa",
@@ -58,6 +60,7 @@ rule hmmscan:
         hmmsearch --cpu {threads} --noali --notextw --tblout {output} {input.database} {input.query}
         """
 
+# Reformat output into a tabular format
 rule hmm_reformat:
     input:
         "results/{sample}/hmmer/{sample}.hmmscan"
@@ -75,6 +78,7 @@ rule hmm_reformat:
         sed '/^#/ d' {input} | sed 's/ \+/;/g' | cut -d ';' -f 1,3,5,6 | tr ';' '\t' > {output}
         """
 
+# Assign virulence classification to annotations
 rule virulence_classification:
     input:
         hmm="results/{sample}/hmmer/{sample}.tsv",
@@ -93,6 +97,7 @@ rule virulence_classification:
     script:
         "scripts/virulence_classification.py"
 
+# Define whether toxins are secreted or non-secreted.
 rule signalp:
     input:
         "results/{sample}/prodigal/{sample}.faa"
