@@ -109,5 +109,5 @@ rule signalp:
     shell:
         """
         module load signalp/6h
-        signalp6 --fastafile {input} --output_dir {params.outputdir} --write_procs {threads} --torch_num_threads {threads}
+        signalp6 --fastafile {input} --output_dir {params.outputdir} --write_procs {threads}
         """
