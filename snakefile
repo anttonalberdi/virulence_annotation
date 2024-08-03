@@ -17,7 +17,7 @@ samples, = glob_wildcards("genomes/{sample}.fa")
 rule all:
     input:
         expand("results/{sample}/hmmer/{sample}.csv", sample=samples),
-        expand("results/{sample}/signalp/{sample}.csv", sample=samples)
+        expand("results/{sample}/signalp/{sample}.csv", sample=samples),
         expand("results/{sample}/rf/{sample}.csv", sample=samples)
 
 # Predict genes in genome sequences. 
