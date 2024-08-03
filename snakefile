@@ -204,7 +204,21 @@ rule merge_RF:
         time=120
     shell:
         """
-        cat {input.AAC} {input.DPC} {input.CTDC} {input.CTDT} {input.CTDD} > {output.all}
+        xjoin() {{
+            local f
+                local srt="sort -k 1b,1"
+                if [ "$#" -lt 2 ]; then
+                        echo "xjoin: need at least 2 files" >&2
+                        return 1
+                elif [ "$#" -lt 3 ]; then
+                        join -t $'\\t' <($srt "$1") <($srt "$2")
+                else
+                        f=$1
+                        shift
+                        join -t $'\\t' <($srt "$f") <(xjoin "$@")
+                fi
+        }}
+        xjoin {input.AAC} {input.DPC} {input.CTDC} {input.CTDT} {input.CTDD} | sort -k 1n,1 > {output.all}
         python scripts/virulence_prediction.py {output.all} {output.final} {input.model}
         """
 
