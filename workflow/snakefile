@@ -8,7 +8,7 @@
 # 1) Copy this snakefile to the working directory
 # 2) Store the genome sequences in the folder 'genomes' in the working directory with extension .fa, and without any "." or "/" in the file name besides the .fa.
 # 3) Launch the snakemake using the following code:
-# snakemake -j 20 --cluster 'sbatch -o logs/{params.jobname}-slurm-%j.out --mem {resources.mem_gb}G --time {resources.time} -c {threads} --job-name={params.jobname} -v'   --use-conda --conda-frontend mamba --conda-prefix conda --latency-wait 600
+# snakemake -j 20 --cluster 'sbatch -o results/logs/{params.jobname}-slurm-%j.out --mem {resources.mem_gb}G --time {resources.time} -c {threads} --job-name={params.jobname} -v'   --use-conda --conda-frontend mamba --conda-prefix conda --latency-wait 600
 
 #List sample wildcards
 samples, = glob_wildcards("genomes/{sample}.fa")
@@ -20,7 +20,7 @@ rule all:
         expand("results/{sample}/signalp/{sample}.csv", sample=samples),
         expand("results/{sample}/rf/{sample}.csv", sample=samples)
 
-# Predict genes in genome sequences. 
+# Predict genes in genome sequences.
 rule prodigal:
     input:
         "genomes/{sample}.fa"
@@ -96,7 +96,7 @@ rule virulence_classification:
         mem_gb=8,
         time=5
     script:
-        "scripts/virulence_classification.py"
+        "workflow/scripts/virulence_classification.py"
 
 # Predict virulence from RF models
 rule AAC:
@@ -113,7 +113,7 @@ rule AAC:
         time=120
     shell:
         """
-        python scripts/AAC.py --file {input} --out {output}
+        python workflow/scripts/AAC.py --file {input} --out {output}
         """
 
 rule DPC:
@@ -130,7 +130,7 @@ rule DPC:
         time=120
     shell:
         """
-        python scripts/DPC.py --file {input} --out {output}
+        python workflow/scripts/DPC.py --file {input} --out {output}
         """
 
 rule CTDC:
@@ -147,7 +147,7 @@ rule CTDC:
         time=120
     shell:
         """
-        python scripts/CTDC.py --file {input} --out {output}
+        python workflow/scripts/CTDC.py --file {input} --out {output}
         """
 
 rule CTDT:
@@ -164,7 +164,7 @@ rule CTDT:
         time=120
     shell:
         """
-        python scripts/CTDT.py --file {input} --out {output}
+        python workflow/scripts/CTDT.py --file {input} --out {output}
         """
 
 rule CTDD:
@@ -181,7 +181,7 @@ rule CTDD:
         time=120
     shell:
         """
-        python scripts/CTDD.py --file {input} --out {output}
+        python workflow/scripts/CTDD.py --file {input} --out {output}
         """
 
 rule merge_RF:
@@ -219,7 +219,7 @@ rule merge_RF:
                 fi
         }}
         xjoin {input.AAC} {input.DPC} {input.CTDC} {input.CTDT} {input.CTDD} | sort -k 1n,1 > {output.all}
-        python scripts/virulence_prediction.py {output.all} {output.final} {input.model}
+        python workflow/scripts/virulence_prediction.py {output.all} {output.final} {input.model}
         """
 
 # Define whether toxins are secreted or non-secreted.
