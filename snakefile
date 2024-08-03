@@ -17,7 +17,8 @@ samples, = glob_wildcards("genomes/{sample}.fa")
 rule all:
     input:
         expand("results/{sample}/hmmer/{sample}.csv", sample=samples),
-        expand("results/{sample}/signalp/{sample}_summary.signalp6", sample=samples)
+        expand("results/{sample}/signalp/{sample}.csv", sample=samples)
+        expand("results/{sample}/rf/{sample}.csv", sample=samples)
 
 # Predict genes in genome sequences. 
 rule prodigal:
@@ -212,10 +213,10 @@ rule signalp:
     input:
         "results/{sample}/prodigal/{sample}.faa"
     output:
-        "results/{sample}/signalp/{sample}_summary.signalp6"
+        "results/{sample}/signalp/{sample}.csv"
     params:
         jobname="{sample}.sp",
-        outputdir="results/{sample}/signalp"
+        outputdir="results/{sample}/signalp/output"
     threads:
         8
     resources:
@@ -225,4 +226,5 @@ rule signalp:
         """
         module load signalp/6h
         signalp6 --fastafile {input} --output_dir {params.outputdir} --write_procs {threads}
+        cp {params.outputdir}/output.gff3 {output}
         """
