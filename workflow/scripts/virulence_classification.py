@@ -1,10 +1,10 @@
 import sys
 
-positive_domains_file = snakemake.input[1]
-negative_domains_file = snakemake.input[2]
-ambiguous_domains_file = snakemake.input[3]
-input_table = snakemake.input[0]
-output_table = snakemake.output[0]
+input_table = sys.argv[1]
+positive_domains_file = sys.argv[2]
+negative_domains_file = sys.argv[3]
+ambiguous_domains_file = sys.argv[4]
+output_table = sys.argv[5]
 
 # Read the positive domains into a set for fast lookup
 with open(positive_domains_file, 'r') as domains_file:
