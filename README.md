@@ -1,5 +1,5 @@
 # Virulence annotation
-Virulence factor annotation for MAGs. This pipeline based on PathoFact classifies genes into 5 categories based on the results of hmmer, a random-forest classifier and signalp:
+Virulence factor annotation for MAGs. This pipeline based on the virulence workflow of [PathoFact](https://git-r3lab.uni.lu/laura.denies/PathoFact) classifies genes into 5 categories based on the results of [hmmer](https://www.ebi.ac.uk/Tools/hmmer/), the [random-forest classifier](https://microbiomejournal.biomedcentral.com/articles/10.1186/s40168-020-00993-9) of Pathofact and [signalp](https://dtu.biolib.com/SignalP-6):
 
 - 1: Secreted Virulence factor
 - 2: Non-secreted Virulence factor
