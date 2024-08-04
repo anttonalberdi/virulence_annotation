@@ -7,7 +7,7 @@ rf_df = pd.read_csv(sys.argv[2], sep='\t', header=None)
 signalp_df = pd.read_csv(sys.argv[3], sep='\t', header=None)
 
 # Keep only relevant columns
-hmmer_df = hmmer_df[[0, 4]]
+hmmer_df = hmmer_df[[0, 1]]
 rf_df = rf_df[[1, 2]]
 signalp_df = signalp_df[[0, 1]]
 
