@@ -270,7 +270,7 @@ rule compute_statistics:
     output:
         "results/virulence_summary.tsv"
     params:
-        jobname="{sample}.st"
+        jobname="final.stats"
     threads:
         1
     resources:
