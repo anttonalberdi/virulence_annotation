@@ -6,7 +6,7 @@ import sys
 def calculate_statistics(file_list):
     # Define the columns for the output DataFrame
     output_columns = [
-        "Sample", 
+        "Genome", 
         "V1", 
         "V2", 
         "V3", 
@@ -53,12 +53,12 @@ def calculate_statistics(file_list):
         # Calculate the normalized index
         normalised_index = virulence_index / total_rows * 100 if total_rows > 0 else 0
 
-        # Extract the sample name without the .tsv extension
-        sample_name = os.path.basename(file_path).replace('.tsv', '')
+        # Extract the genome name without the .tsv extension
+        genome_name = os.path.basename(file_path).replace('.tsv', '')
         
         # Append the results to the DataFrame
         results_df = results_df.append({
-            "Sample": sample_name,
+            "Genome": genome_name,
             "V1": count_1,
             "V2": count_2,
             "V3": count_3,
