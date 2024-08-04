@@ -20,6 +20,9 @@ signalp_df.columns = ['gene', 'signalp']
 merged_df = pd.merge(hmmer_df, rf_df, on='gene', how='outer')
 merged_df = pd.merge(merged_df, signalp_df, on='gene', how='outer')
 
+# Fill NaN values with 'NA' to denote missing data
+merged_df = merged_df.fillna('NA')
+
 # Define a function to determine the prediction value
 def determine_prediction(row):
     hmmer = row['hmmer']
