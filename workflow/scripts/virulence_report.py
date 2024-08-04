@@ -50,7 +50,9 @@ def determine_prediction(row):
     elif hmmer == 'pathogenic' and rf == 'negative' and signalp == 'NA':
         return "4: Potential Non-secreted Virulence factor"
     elif hmmer == 'negative' and rf == 'negative':
-        return "-"
+        return "5: Not a Virulence factor"
+    elif hmmer == 'NA' and rf == 'negative':
+        return "5: Not a Virulence factor"
     else:
         return "NA"
 
