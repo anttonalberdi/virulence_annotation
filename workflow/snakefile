@@ -254,7 +254,7 @@ rule signalp:
         """
         module load signalp/6h
         signalp6 --fastafile {input} --output_dir {params.outputdir} --write_procs {threads}
-        cat {params.outputdir}/output.gff3  | cut -f1,3,6 | awk -F' # |[ \t]+' ' {print $1, $9, $14}' OFS='\t' > {output}
+        cat {params.outputdir}/output.gff3  | cut -f1,3,6 | awk -F' # |[ \t]+' '!/^#/ {print $1, $6, $7}' OFS='\t' > {output}
         """
 
 rule virulence_report:
