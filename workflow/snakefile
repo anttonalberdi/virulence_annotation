@@ -16,7 +16,8 @@ samples, = glob_wildcards("genomes/{sample}.fa")
 #Expand target files
 rule all:
     input:
-        expand("results/{sample}.tsv", sample=samples)
+        expand("results/{sample}.tsv", sample=samples),
+        "results/virulence_summary.tsv"
 
 # Predict genes in genome sequences.
 rule prodigal:
@@ -260,4 +261,15 @@ rule virulence_report:
     shell:
         """
         python workflow/scripts/virulence_report.py {input.hmmer} {input.rf} {input.signalp} {output}
+        """
+
+# Define the rule to compute statistics from all results
+rule compute_statistics:
+    input:
+        expand("results/{sample}.tsv", sample=samples)
+    output:
+        "results/virulence_summary.tsv"
+    shell:
+        """
+        python workflow/scripts/virulence_summary.py {input} {output}
         """
