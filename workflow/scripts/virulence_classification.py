@@ -42,7 +42,7 @@ with open(input_table, 'r') as infile:
 with open(output_table, 'w') as outfile:
     for id_col1, flags in results.items():
         if flags['positive']:
-            annotation = "positive"
+            annotation = "pathogenic"
         elif not flags['positive'] and flags['ambiguous']:
             annotation = "unclassified"
         elif flags['negative'] and not flags['positive'] and not flags['ambiguous']:
