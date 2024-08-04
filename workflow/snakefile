@@ -66,7 +66,7 @@ rule hmm_reformat:
     input:
         "results/{sample}/hmmer/{sample}.hmmscan"
     output:
-        "results/{sample}/hmmer/{sample}.tsv"
+        "results/{sample}/hmmer/{sample}.txt"
     params:
         jobname="{sample}.rf"
     threads:
@@ -82,12 +82,12 @@ rule hmm_reformat:
 # Assign virulence classification to annotations
 rule virulence_classification:
     input:
-        hmm="results/{sample}/hmmer/{sample}.tsv",
+        hmm="results/{sample}/hmmer/{sample}.txt",
         positive="/projects/mjolnir1/people/jpl786/PathoFact/databases/models_and_domains/positive_domains.tsv",
         negative="/projects/mjolnir1/people/jpl786/PathoFact/databases/models_and_domains/negative_domains.tsv",
         shared="/projects/mjolnir1/people/jpl786/PathoFact/databases/models_and_domains/shared_domains.tsv"
     output:
-        "results/{sample}/hmmer/{sample}.csv"
+        "results/{sample}/hmmer/{sample}.tsv"
     params:
         jobname="{sample}.cl"
     threads:
@@ -208,7 +208,7 @@ rule merge_RF:
         model="/projects/mjolnir1/people/jpl786/PathoFact/scripts/Virulence_factor_model.sav"
     output:
         all="results/{sample}/rf/{sample}_all.txt",
-        final="results/{sample}/rf/{sample}.csv"
+        final="results/{sample}/rf/{sample}.tsv"
     params:
         jobname="{sample}.rf"
     threads:
@@ -243,7 +243,7 @@ rule signalp:
     input:
         "results/{sample}/prodigal/{sample}.faa"
     output:
-        "results/{sample}/signalp/{sample}.csv"
+        "results/{sample}/signalp/{sample}.tsv"
     params:
         jobname="{sample}.sp",
         outputdir="results/{sample}/signalp/output"
@@ -256,5 +256,26 @@ rule signalp:
         """
         module load signalp/6h
         signalp6 --fastafile {input} --output_dir {params.outputdir} --write_procs {threads}
-        cp {params.outputdir}/output.gff3 {output}
+        cat {params.outputdir}/output.gff3  | cut -f1,3,6 | awk -F' # |[ \t]+' ' {print $1, $9, $14}' OFS='\t' > {output}
+        """
+
+rule virulence_report:
+    input:
+        hmmer="results/{sample}/hmmer/{sample}.tsv",
+        rf="results/{sample}/rf/{sample}.tsv",
+        signalp="results/{sample}/signalp/{sample}.tsv"
+    output:
+        "results/{sample}/{sample}.tsv"
+    params:
+        jobname="{sample}.cl"
+    threads:
+        1
+    resources:
+        mem_gb=8,
+        time=5
+    conda:
+        "envs/environment.yml"
+    shell:
+        """
+        python workflow/scripts/virulence_report.py {input.hmm} {input.rf} {input.signalp} {output}
         """
