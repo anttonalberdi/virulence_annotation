@@ -57,5 +57,8 @@ def determine_prediction(row):
 # Apply the function to each row to create the 'prediction' column
 merged_df['prediction'] = merged_df.apply(determine_prediction, axis=1)
 
+# Sort the DataFrame by the 'Annotation' and 'Gene' columns
+merged_df = merged_df.sort_values(by=['prediction', 'gene'])
+
 # Output the final dataframe to a TSV file
 merged_df.to_csv(sys.argv[4], sep='\t', index=False)
