@@ -269,6 +269,13 @@ rule compute_statistics:
         expand("results/{sample}.tsv", sample=samples)
     output:
         "results/virulence_summary.tsv"
+    params:
+        jobname="{sample}.st"
+    threads:
+        1
+    resources:
+        mem_gb=8,
+        time=5
     shell:
         """
         python workflow/scripts/virulence_summary.py {input} {output}
