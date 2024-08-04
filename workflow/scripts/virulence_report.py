@@ -39,9 +39,13 @@ def determine_prediction(row):
         return "2: Non-secreted Virulence factor"
     elif hmmer == 'negative' and rf == 'pathogenic' and signalp != 'NA':
         return "3: Potential Secreted Virulence factor"
+    elif hmmer == 'NA' and rf == 'pathogenic' and signalp != 'NA':
+        return "3: Potential Secreted Virulence factor"
     elif hmmer == 'pathogenic' and rf == 'negative' and signalp != 'NA':
         return "3: Potential Secreted Virulence factor"
     elif hmmer == 'negative' and rf == 'pathogenic' and signalp == 'NA':
+        return "4: Potential Non-secreted Virulence factor"
+    elif hmmer == 'NA' and rf == 'pathogenic' and signalp == 'NA':
         return "4: Potential Non-secreted Virulence factor"
     elif hmmer == 'pathogenic' and rf == 'negative' and signalp == 'NA':
         return "4: Potential Non-secreted Virulence factor"
