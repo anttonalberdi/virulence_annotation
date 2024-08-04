@@ -275,5 +275,5 @@ rule virulence_report:
         "envs/environment.yml"
     shell:
         """
-        python workflow/scripts/virulence_report.py {input.hmm} {input.rf} {input.signalp} {output}
+        python workflow/scripts/virulence_report.py {input.hmmer} {input.rf} {input.signalp} {output}
         """
