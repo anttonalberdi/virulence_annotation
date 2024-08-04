@@ -6,25 +6,25 @@ import sys
 def calculate_statistics(file_list):
     # Define the columns for the output DataFrame
     output_columns = [
-        "Filename", 
-        "Secreted Virulence factor", 
-        "Non-secreted Virulence factor", 
-        "Potential Secreted Virulence factor", 
-        "Potential Non-secreted Virulence factor", 
-        "Not a Virulence factor", 
-        "Summatory Index", 
-        "Normalized Index"
+        "Sample", 
+        "V1", 
+        "V2", 
+        "V3", 
+        "V4", 
+        "V5", 
+        "AVI", 
+        "NVI"
     ]
     # Create an empty DataFrame to store results
     results_df = pd.DataFrame(columns=output_columns)
     
     # Define the weights for the summatory index
     weights = {
-        "1: Secreted Virulence factor": 1.0,
-        "2: Non-secreted Virulence factor": 0.5,
-        "3: Potential Secreted Virulence factor": 0.2,
-        "4: Potential Non-secreted Virulence factor": 0.1,
-        "5: Not a Virulence factor": 0.0
+        "V1": 1.0,
+        "V2": 0.5,
+        "V3": 0.2,
+        "V4": 0.1,
+        "V5": 0.0
     }
     
     for file_path in file_list:
@@ -38,31 +38,34 @@ def calculate_statistics(file_list):
         count_4 = (df['prediction'] == "4: Potential Non-secreted Virulence factor").sum()
         count_5 = (df['prediction'] == "5: Not a Virulence factor").sum()
         
-        # Calculate the summatory index
-        summatory_index = (
-            count_1 * weights["1: Secreted Virulence factor"] +
-            count_2 * weights["2: Non-secreted Virulence factor"] +
-            count_3 * weights["3: Potential Secreted Virulence factor"] +
-            count_4 * weights["4: Potential Non-secreted Virulence factor"] +
-            count_5 * weights["5: Not a Virulence factor"]
+        # Calculate the virulence index
+        virulence_index = (
+            count_1 * weights["V1"] +
+            count_2 * weights["V2"] +
+            count_3 * weights["V3"] +
+            count_4 * weights["V4"] +
+            count_5 * weights["V5"]
         )
         
         # Calculate the total number of rows
         total_rows = df.shape[0]
         
         # Calculate the normalized index
-        normalized_index = summatory_index / total_rows if total_rows > 0 else 0
+        normalised_index = virulence_index / total_rows * 100 if total_rows > 0 else 0
+
+        # Extract the sample name without the .tsv extension
+        sample_name = os.path.basename(file_path).replace('.tsv', '')
         
         # Append the results to the DataFrame
         results_df = results_df.append({
-            "Filename": os.path.basename(file_path),
-            "Secreted Virulence factor": count_1,
-            "Non-secreted Virulence factor": count_2,
-            "Potential Secreted Virulence factor": count_3,
-            "Potential Non-secreted Virulence factor": count_4,
-            "Not a Virulence factor": count_5,
-            "Summatory Index": summatory_index,
-            "Normalized Index": normalized_index
+            "Sample": sample_name,
+            "V1": count_1,
+            "V2": count_2,
+            "V3": count_3,
+            "V4": count_4,
+            "V5": count_5,
+            "AVI": virulence_index,
+            "NVI": normalised_index
         }, ignore_index=True)
     
     return results_df
