@@ -8,11 +8,11 @@ Virulence factor annotation for MAGs. This pipeline based on PathoFact classifie
 - 5: Not a Virulence factor
 
 ### Run pipeline
-On a screen session, launch the snakefile to generate the SBMLs
+On a screen session, launch the snakefile to annotate virulence factors:
+
 ```
 screen -S virulence
 cd virulence_annotation
-module purge && module load snakemake/7.20.0 mamba/1.3.1
 mamba env create -f workflow/envs/environment.yml
 conda activate virulence_annotation_env
 snakemake \
