@@ -93,8 +93,6 @@ rule virulence_classification:
     resources:
         mem_gb=8,
         time=5
-    conda:
-        "envs/environment.yml"
     shell:
         """
         python workflow/scripts/virulence_classification.py {input.hmm} {input.positive} {input.negative} {input.shared} {output}
@@ -113,8 +111,6 @@ rule AAC:
     resources:
         mem_gb=8,
         time=120
-    conda:
-        "envs/environment.yml"
     shell:
         """
         python workflow/scripts/AAC.py --file {input} --out {output}
@@ -132,8 +128,6 @@ rule DPC:
     resources:
         mem_gb=8,
         time=120
-    conda:
-        "envs/environment.yml"
     shell:
         """
         python workflow/scripts/DPC.py --file {input} --out {output}
@@ -151,8 +145,6 @@ rule CTDC:
     resources:
         mem_gb=8,
         time=120
-    conda:
-        "envs/environment.yml"
     shell:
         """
         python workflow/scripts/CTDC.py --file {input} --out {output}
@@ -170,8 +162,6 @@ rule CTDT:
     resources:
         mem_gb=8,
         time=120
-    conda:
-        "envs/environment.yml"
     shell:
         """
         python workflow/scripts/CTDT.py --file {input} --out {output}
@@ -189,8 +179,6 @@ rule CTDD:
     resources:
         mem_gb=8,
         time=120
-    conda:
-        "envs/environment.yml"
     shell:
         """
         python workflow/scripts/CTDD.py --file {input} --out {output}
@@ -214,8 +202,6 @@ rule merge_RF:
     resources:
         mem_gb=8,
         time=120
-    conda:
-        "envs/environment.yml"
     shell:
         """
         xjoin() {{
@@ -271,8 +257,6 @@ rule virulence_report:
     resources:
         mem_gb=8,
         time=5
-    conda:
-        "envs/environment.yml"
     shell:
         """
         python workflow/scripts/virulence_report.py {input.hmmer} {input.rf} {input.signalp} {output}
