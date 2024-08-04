@@ -13,9 +13,10 @@ On a screen session, launch the snakefile to generate the SBMLs
 screen -S virulence
 cd virulence_annotation
 module purge && module load snakemake/7.20.0 mamba/1.3.1
+mamba env create -f workflow/envs/environment.yml
+conda activate virulence_annotation_env
 snakemake \
   -j 20 \
   --cluster 'sbatch -o results/log/{params.jobname}-slurm-%j.out --mem {resources.mem_gb}G --time {resources.time} -c {threads} --job-name={params.jobname} -v' \
-  --use-conda --conda-frontend mamba --conda-prefix conda \
   --latency-wait 600
 ```
