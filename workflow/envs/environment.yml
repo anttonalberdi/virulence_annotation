@@ -2,6 +2,7 @@ name: virulence_annotation_env
 dependencies:
   - conda-forge::python=3.7
   - conda-forge::python_abi=3.7
+  - snakemake=7.20.0
   - conda-forge::biopython=1.79
   - conda-forge::numpy=1.17.0
   - conda-forge::pandas=1.3.5
