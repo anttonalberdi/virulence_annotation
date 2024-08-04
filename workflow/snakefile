@@ -16,9 +16,7 @@ samples, = glob_wildcards("genomes/{sample}.fa")
 #Expand target files
 rule all:
     input:
-        expand("results/{sample}/hmmer/{sample}.csv", sample=samples),
-        expand("results/{sample}/signalp/{sample}.csv", sample=samples),
-        expand("results/{sample}/rf/{sample}.csv", sample=samples)
+        expand("results/{sample}.tsv", sample=samples)
 
 # Predict genes in genome sequences.
 rule prodigal:
@@ -265,9 +263,9 @@ rule virulence_report:
         rf="results/{sample}/rf/{sample}.tsv",
         signalp="results/{sample}/signalp/{sample}.tsv"
     output:
-        "results/{sample}/{sample}.tsv"
+        "results/{sample}.tsv"
     params:
-        jobname="{sample}.cl"
+        jobname="{sample}.vr"
     threads:
         1
     resources:
